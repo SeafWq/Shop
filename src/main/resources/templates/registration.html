@@ -1,20 +1,31 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<form th:action="@{/register}" method="post" id="register">
-    <label th:th:for="username">Username: </label>
-    <input type="text" name="username"/><br/>
+<form th:action="@{/register}" method="post" id="register" th:object="${user}">
+
     <label th:for="email" name="email">Email:</label>
-    <input type="text" name="email"><br>
+    <input type="text" name="email" th:field="*{email}"><br><span class="validationError"
+    th:if="${#fields.hasErrors('email')}"
+    th:errors="*{email}">Поле email должно иметь формат адреса электронной почты</span>
+
+    <label th:for="nameAcc" name="nameAcc">Username</label>
+    <input type="text" name="nameAcc" th:field="*{nameAcc}"><br>
+    <span class="validationError"
+    th:if="${#fields.hasErrors('nameAcc')}"
+    th:errors="*{nameAcc}">Поле должно иметь не менее 5 символов</span>
+
     <label th:for="password">Password: </label>
-    <input type="password" name="password"/><br/>
-    <label th:for="confirm">Confirm password: </label>
-    <input type="password" name="password">
+    <input type="password" name="password" th:field="*{password}"/><br/>
+    <span class="validationError"
+    th:if="${#fields.hasErrors('password')}"
+    th:errors="*{password}">Пароль должен состоять минимум из 5 знаков</span>
+
     <input type="submit" value="Register">
 </form>
 </body>
