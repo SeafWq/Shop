@@ -1,6 +1,6 @@
 package com.example.shop.security;
 
-import com.example.shop.User.UserService;
+import com.example.shop.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
@@ -18,12 +17,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @AllArgsConstructor
 public class SecurityConfig extends  WebSecurityConfigurerAdapter{
 
+
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
      http
+             .csrf().disable()
                 .authorizeRequests()
                 //Доступ только для не зарегистрированных пользователей
                 .antMatchers("/register").not().fullyAuthenticated()
@@ -32,10 +33,10 @@ public class SecurityConfig extends  WebSecurityConfigurerAdapter{
                 //Все остальные страницы требуют аутентификации
                 .anyRequest().authenticated()
                 .and()
-                //Настройка для входа в систему
                 .formLogin()
-             .loginPage("/login")
-                //Перенарпавление на главную страницу после успешного входа
+//             .loginPage("/login")
+             .usernameParameter("email")
+             .passwordParameter("password")
                 .defaultSuccessUrl("/", true)
                 .permitAll()
                 .and()

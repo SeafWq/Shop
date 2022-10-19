@@ -1,16 +1,15 @@
 package com.example.shop.registration;
 
-import com.example.shop.User.Role;
-import com.example.shop.User.User;
-import com.example.shop.User.UserRepository;
-import com.example.shop.User.UserService;
+import com.example.shop.user.Role;
+import com.example.shop.user.User;
+import com.example.shop.user.UserRepository;
+import com.example.shop.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
 public class RegistrationService {
-
 
     private final UserRepository userRepository;
     private final UserService userService;
