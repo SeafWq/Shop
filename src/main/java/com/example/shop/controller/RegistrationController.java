@@ -6,11 +6,11 @@ import com.example.shop.registration.RegistrationService;
 import com.example.shop.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @AllArgsConstructor
@@ -24,17 +24,19 @@ public class RegistrationController {
         return "registration";
     }
 
-    @PostMapping()
-    public String register(Errors errors, RegistrationRequest request){
-        if (errors.hasErrors()){
-            return "registration";
-        }
-         registrationService.register(request);
-         return "redirect:/login";
-    }
-
     @ModelAttribute("user")
     public User user(){
         return new User();
+    }
+
+    @PostMapping()
+    public String register( @Valid @ModelAttribute("user") User user ,
+                            @Valid Errors errors,
+                            RegistrationRequest request, Model model){
+        if (errors.hasErrors()){
+            return "registration";
+        }
+        registrationService.register(request);
+        return "redirect:/login";
     }
 }
